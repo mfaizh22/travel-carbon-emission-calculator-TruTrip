@@ -1,0 +1,136 @@
+{
+	"info": {
+		"_postman_id": "a5e3b8d7-4c6f-4e5a-9b3c-f8e2d7a1c9b0",
+		"name": "Carbon Emission API",
+		"description": "A collection for testing the Carbon Emission Calculator API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Calculate Carbon Emissions (Flight)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"type\": \"flight\",\n    \"departure_airport\": \"JFK\",\n    \"arrival_airport\": \"LAX\",\n    \"passengers\": 2,\n    \"class\": \"economy\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/v1/carbon-emissions/calculate",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"v1",
+						"carbon-emissions",
+						"calculate"
+					]
+				},
+				"description": "Calculate carbon emissions for a flight"
+			},
+			"response": []
+		},
+		{
+			"name": "Calculate Carbon Emissions (Train)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"type\": \"train\",\n    \"departure_station\": \"Penn Station\",\n    \"arrival_station\": \"Union Station\",\n    \"distance\": 350,\n    \"passengers\": 1\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/v1/carbon-emissions/calculate",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"v1",
+						"carbon-emissions",
+						"calculate"
+					]
+				},
+				"description": "Calculate carbon emissions for a train journey"
+			},
+			"response": []
+		},
+		{
+			"name": "Calculate Carbon Emissions (Hotel)",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"type\": \"hotel\",\n    \"nights\": 3,\n    \"rooms\": 1,\n    \"hotel_class\": 4\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/v1/carbon-emissions/calculate",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"v1",
+						"carbon-emissions",
+						"calculate"
+					]
+				},
+				"description": "Calculate carbon emissions for a hotel stay"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://127.0.0.1/api",
+			"type": "string"
+		}
+	]
+}
