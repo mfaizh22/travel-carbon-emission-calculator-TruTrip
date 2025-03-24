@@ -14,6 +14,13 @@ trait ApiResponseTrait
      */
     public function successResponse($data, $message = 'success', $code = '200')
     {
+        if (!$data) {
+            return response()->json([
+                'code' => $code,
+                'message' => $message,
+            ]);
+        }
+
         return response()->json([
             'code' => $code,
             'message' => $message,
@@ -32,6 +39,13 @@ trait ApiResponseTrait
      */
     public function errorResponse($message = 'error', $data = null, $code = '400', $statusCode = 400)
     {
+        if (!$data) {
+            return response()->json([
+                'code' => $code,
+                'message' => $message,
+            ], $statusCode);
+        }
+        
         return response()->json([
             'code' => $code,
             'message' => $message,

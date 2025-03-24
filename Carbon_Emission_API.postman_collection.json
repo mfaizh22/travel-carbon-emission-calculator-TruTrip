@@ -7,101 +7,307 @@
 	},
 	"item": [
 		{
-			"name": "Calculate Carbon Emissions (Flight)",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Test User\",\n    \"email\": \"test@example.com\",\n    \"password\": \"password123\",\n    \"password_confirmation\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"register"
+							]
+						},
+						"description": "Register a new user account"
 					},
-					{
-						"key": "Accept",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"type\": \"flight\",\n    \"departure_airport\": \"JFK\",\n    \"arrival_airport\": \"LAX\",\n    \"passengers\": 2,\n    \"class\": \"economy\"\n}"
+					"response": []
 				},
-				"url": {
-					"raw": "{{base_url}}/v1/carbon-emissions/calculate",
-					"host": [
-						"{{base_url}}"
-					],
-					"path": [
-						"v1",
-						"carbon-emissions",
-						"calculate"
-					]
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"test@example.com\",\n    \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"login"
+							]
+						},
+						"description": "Login with email and password to get an authentication token"
+					},
+					"response": []
 				},
-				"description": "Calculate carbon emissions for a flight"
-			},
-			"response": []
+				{
+					"name": "Resend Verification Email",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/email/verification-notification",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"email",
+								"verification-notification"
+							]
+						},
+						"description": "Resend the email verification link"
+					},
+					"response": []
+				},
+				{
+					"name": "Verify Email",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/email/verify/:id/:hash",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"email",
+								"verify",
+								":id",
+								":hash"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "User ID"
+								},
+								{
+									"key": "hash",
+									"value": "verification-hash",
+									"description": "Verification hash from the email"
+								}
+							]
+						},
+						"description": "Verify email address using the link sent to the user's email"
+					},
+					"response": []
+				},
+				{
+					"name": "Get User",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/user",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user"
+							]
+						},
+						"description": "Get the authenticated user's information"
+					},
+					"response": []
+				}
+			],
+			"description": "Authentication endpoints for user registration, login, and email verification"
 		},
 		{
-			"name": "Calculate Carbon Emissions (Train)",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
+			"name": "Carbon Emissions",
+			"item": [
+				{
+					"name": "Calculate Carbon Emissions (Flight)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"type\": \"flight\",\n    \"departure_airport\": \"JFK\",\n    \"arrival_airport\": \"LAX\",\n    \"passengers\": 2,\n    \"class\": \"economy\",\n    \"airline\": \"AA\",\n    \"flight_number\": \"AA123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/carbon-emissions/calculate",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"carbon-emissions",
+								"calculate"
+							]
+						},
+						"description": "Calculate carbon emissions for a flight\n\nRequest Parameters:\n- type: \"flight\" (required)\n- departure_airport: IATA code of departure airport (required)\n- arrival_airport: IATA code of arrival airport (required)\n- passengers: Number of passengers (default: 1)\n- class: Booking class (economy, business, first) (default: economy)\n- airline: IATA airline code (optional)\n- flight_number: Flight number (optional)\n\nResponse Example:\n```json\n{\n    \"type\": \"flight\",\n    \"emissions\": {\n        \"quantity\": 245.6,\n        \"unit\": \"kg\"\n    },\n    \"distance\": {\n        \"value\": 2475,\n        \"unit\": \"km\"\n    },\n    \"eco_label\": \"Eco-friendly flight\",\n    \"timestamp\": \"2025-03-24T04:12:48.000000Z\",\n    \"provider\": \"Squake\"\n}\n```"
 					},
-					{
-						"key": "Accept",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"type\": \"train\",\n    \"departure_station\": \"Penn Station\",\n    \"arrival_station\": \"Union Station\",\n    \"distance\": 350,\n    \"passengers\": 1\n}"
+					"response": []
 				},
-				"url": {
-					"raw": "{{base_url}}/v1/carbon-emissions/calculate",
-					"host": [
-						"{{base_url}}"
-					],
-					"path": [
-						"v1",
-						"carbon-emissions",
-						"calculate"
-					]
+				{
+					"name": "Calculate Carbon Emissions (Train)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"type\": \"train\",\n    \"departure_station\": \"Penn Station\",\n    \"arrival_station\": \"Union Station\",\n    \"passengers\": 1,\n    \"train_type\": \"high_speed\",\n    \"seat_type\": \"second_class\",\n    \"operator_name\": \"Amtrak\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/carbon-emissions/calculate",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"carbon-emissions",
+								"calculate"
+							]
+						},
+						"description": "Calculate carbon emissions for a train journey\n\nRequest Parameters:\n- type: \"train\" (required)\n- departure_station: Name of departure station (required)\n- arrival_station: Name of arrival station (required)\n- passengers: Number of passengers (default: 1)\n- train_type: Type of train (high_speed, intercity, regional) (default: high_speed)\n- seat_type: Type of seat (first_class, second_class) (default: second_class)\n- operator_name: Name of the train operator (optional)\n\nResponse Example:\n```json\n{\n    \"type\": \"train\",\n    \"emissions\": {\n        \"quantity\": 12.8,\n        \"unit\": \"kg\"\n    },\n    \"distance\": {\n        \"value\": 350,\n        \"unit\": \"km\"\n    },\n    \"eco_label\": \"Low carbon transport\",\n    \"timestamp\": \"2025-03-24T04:12:48.000000Z\",\n    \"provider\": \"Squake\"\n}\n```"
+					},
+					"response": []
 				},
-				"description": "Calculate carbon emissions for a train journey"
-			},
-			"response": []
+				{
+					"name": "Calculate Carbon Emissions (Hotel)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{auth_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"type\": \"hotel\",\n    \"hotel_type\": \"suburban_location\",\n    \"hotel_class\": 4,\n    \"country\": \"US\",\n    \"city\": \"New York\",\n    \"hotel_name\": \"Grand Hotel\",\n    \"hotel_code\": \"GH12345\",\n    \"code_type\": \"giata\",\n    \"room_type\": \"double\",\n    \"guests\": 2\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/v1/carbon-emissions/calculate",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"v1",
+								"carbon-emissions",
+								"calculate"
+							]
+						},
+						"description": "Calculate carbon emissions for a hotel stay\n\nRequest Parameters:\n- type: \"hotel\" (required)\n- hotel_type: Type of hotel location (city_center, suburban_location, resort) (default: suburban_location)\n- hotel_class: Star rating of the hotel (1-5) (default: 3)\n- country: Country code (required)\n- city: City name (required)\n- hotel_name: Name of the hotel (optional)\n- hotel_code: Hotel identifier code (optional)\n- code_type: Type of hotel code (giata, amadeus, etc.) (default: giata)\n- room_type: Type of room (single, double, suite) (default: single)\n- guests: Number of guests (default: 1)\n\nResponse Example:\n```json\n{\n    \"type\": \"hotel\",\n    \"emissions\": {\n        \"quantity\": 18.5,\n        \"unit\": \"kg\"\n    },\n    \"eco_label\": \"Green certified hotel\",\n    \"timestamp\": \"2025-03-24T04:12:48.000000Z\",\n    \"provider\": \"Squake\"\n}\n```"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints for calculating carbon emissions for different transportation and accommodation types"
 		},
 		{
-			"name": "Calculate Carbon Emissions (Hotel)",
+			"name": "API Status",
 			"request": {
-				"method": "POST",
+				"method": "GET",
 				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					},
 					{
 						"key": "Accept",
 						"value": "application/json"
 					}
 				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"type\": \"hotel\",\n    \"nights\": 3,\n    \"rooms\": 1,\n    \"hotel_class\": 4\n}"
-				},
 				"url": {
-					"raw": "{{base_url}}/v1/carbon-emissions/calculate",
+					"raw": "{{base_url}}/test",
 					"host": [
 						"{{base_url}}"
 					],
 					"path": [
-						"v1",
-						"carbon-emissions",
-						"calculate"
+						"test"
 					]
 				},
-				"description": "Calculate carbon emissions for a hotel stay"
+				"description": "Check if the API is working"
 			},
 			"response": []
 		}
@@ -130,6 +336,11 @@
 		{
 			"key": "base_url",
 			"value": "http://127.0.0.1/api",
+			"type": "string"
+		},
+		{
+			"key": "auth_token",
+			"value": "your_auth_token_here",
 			"type": "string"
 		}
 	]

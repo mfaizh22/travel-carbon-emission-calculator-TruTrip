@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'squake' => [
+        'api_key' => env('SQUAKE_API_KEY'),
+        'url' => env('SQUAKE_URL'),
+    ],
+
 ];
