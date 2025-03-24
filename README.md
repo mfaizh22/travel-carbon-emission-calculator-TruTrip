@@ -1,65 +1,393 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Carbon Emission Calculator API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A Laravel-based API for calculating carbon emissions for various transportation methods and accommodations using the Squake API. This service provides accurate carbon footprint calculations for flights, trains, and hotel stays.
 
-## About Laravel
+## Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Multiple Transportation Types**: Calculate carbon emissions for:
+  - Flights (domestic and international)
+  - Train journeys
+  - Hotel stays
+- **Secure Authentication**: API endpoints protected with Laravel Sanctum
+- **Comprehensive Error Handling**: Detailed error responses for invalid requests
+- **Integration with Squake API**: Leverages Squake's advanced carbon calculation methodologies
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Requirements
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- PHP 8.1+ (or Docker for Sail)
+- Composer
+- MySQL or compatible database
+- Squake API credentials
 
-## Learning Laravel
+## Installation
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Option 1: Standard Installation
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/carbon-emission-calculator-api.git
+   cd carbon-emission-calculator-api
+   ```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+2. Install dependencies:
+   ```bash
+   composer install
+   ```
 
-## Laravel Sponsors
+3. Copy the environment file and configure your settings:
+   ```bash
+   cp .env.example .env
+   ```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+4. Configure your database and Squake API credentials in the `.env` file:
+   ```
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=carbon_emissions
+   DB_USERNAME=root
+   DB_PASSWORD=
 
-### Premium Partners
+   SQUAKE_API_KEY=your_api_key_here
+   SQUAKE_URL=https://api.sandbox.squake.earth/v2
+   ```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+5. Generate application key:
+   ```bash
+   php artisan key:generate
+   ```
 
-## Contributing
+6. Run migrations:
+   ```bash
+   php artisan migrate
+   ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+7. Start the development server:
+   ```bash
+   php artisan serve
+   ```
 
-## Code of Conduct
+### Option 2: Using Laravel Sail (Docker)
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Laravel Sail provides a lightweight command-line interface for interacting with Laravel's default Docker development environment.
 
-## Security Vulnerabilities
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/carbon-emission-calculator-api.git
+   cd carbon-emission-calculator-api
+   ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+2. Copy the environment file:
+   ```bash
+   cp .env.example .env
+   ```
+
+3. Install Sail dependencies:
+   ```bash
+   docker run --rm \
+       -u "$(id -u):$(id -g)" \
+       -v "$(pwd):/var/www/html" \
+       -w /var/www/html \
+       laravelsail/php81-composer:latest \
+       composer install --ignore-platform-reqs
+   ```
+
+4. Configure your Squake API credentials in the `.env` file:
+   ```
+   SQUAKE_API_KEY=your_api_key_here
+   SQUAKE_URL=https://api.sandbox.squake.earth/v2
+   ```
+
+5. Start Sail:
+   ```bash
+   ./vendor/bin/sail up -d
+   ```
+
+6. Generate application key:
+   ```bash
+   ./vendor/bin/sail artisan key:generate
+   ```
+
+7. Run migrations:
+   ```bash
+   ./vendor/bin/sail artisan migrate
+   ```
+
+### Sail Commands
+
+Here are the common Laravel Sail commands organized by task:
+
+1. **Container Management**:
+   ```bash
+   # Start all containers
+   ./vendor/bin/sail up -d
+   
+   # Stop all containers
+   ./vendor/bin/sail down
+   
+   # Restart containers
+   ./vendor/bin/sail restart
+   
+   # View container status
+   ./vendor/bin/sail ps
+   ```
+
+2. **Artisan Commands**:
+   ```bash
+   # Run migrations
+   ./vendor/bin/sail artisan migrate
+   
+   # Generate key
+   ./vendor/bin/sail artisan key:generate
+   
+   # Clear cache
+   ./vendor/bin/sail artisan cache:clear
+   
+   # Create a controller
+   ./vendor/bin/sail artisan make:controller YourController
+   ```
+
+3. **Dependency Management**:
+   ```bash
+   # Install dependencies
+   ./vendor/bin/sail composer install
+   
+   # Update dependencies
+   ./vendor/bin/sail composer update
+   
+   # Add a package
+   ./vendor/bin/sail composer require package/name
+   ```
+
+4. **Testing**:
+   ```bash
+   # Run all tests
+   ./vendor/bin/sail test
+   
+   # Run specific test file
+   ./vendor/bin/sail test --filter=CarbonEmissionCalculationTest
+   
+   # Run tests with coverage report
+   ./vendor/bin/sail test --coverage
+   ```
+
+5. **Database Access**:
+   ```bash
+   # Access MySQL CLI
+   ./vendor/bin/sail mysql
+   
+   # Run database migrations fresh with seeding
+   ./vendor/bin/sail artisan migrate:fresh --seed
+   ```
+
+6. **Logs and Debugging**:
+   ```bash
+   # View Laravel logs
+   ./vendor/bin/sail logs
+   
+   # View logs for specific container
+   ./vendor/bin/sail logs mysql
+   ```
+
+You can create a Bash alias for Sail to simplify commands:
+
+```bash
+alias sail='[ -f sail ] && sh sail || sh vendor/bin/sail'
+```
+
+After adding this alias, you can simply use `sail` instead of `./vendor/bin/sail`.
+
+## API Documentation
+
+### Authentication
+
+All carbon emission calculation endpoints require authentication using Laravel Sanctum.
+
+#### Register a new user
+
+```
+POST /api/register
+```
+
+**Request Body:**
+```json
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "password",
+  "password_confirmation": "password"
+}
+```
+
+#### Login
+
+```
+POST /api/login
+```
+
+**Request Body:**
+```json
+{
+  "email": "john@example.com",
+  "password": "password"
+}
+```
+
+**Response:**
+```json
+{
+  "user": {
+    "id": 1,
+    "name": "John Doe",
+    "email": "john@example.com",
+    "email_verified_at": "2023-01-01T00:00:00.000000Z",
+    "created_at": "2023-01-01T00:00:00.000000Z",
+    "updated_at": "2023-01-01T00:00:00.000000Z"
+  },
+  "token": "your_api_token"
+}
+```
+
+### Carbon Emission Calculations
+
+#### Calculate Flight Carbon Emissions
+
+```
+POST /api/v1/carbon-emissions/calculate
+```
+
+**Headers:**
+```
+Authorization: Bearer your_api_token
+Content-Type: application/json
+Accept: application/json
+```
+
+**Request Body:**
+```json
+{
+  "type": "flight",
+  "departure_airport": "JFK",
+  "arrival_airport": "LAX",
+  "passengers": 2,
+  "class": "economy",
+  "airline": "AA",
+  "flight_number": "AA123"
+}
+```
+
+**Response:**
+```json
+{
+  "data": {
+    "type": "flight",
+    "carbon_quantity": 1234.56,
+    "carbon_unit": "gram",
+    "distance": {
+      "value": 4000,
+      "unit": "km"
+    },
+    "timestamp": "2023-01-01T00:00:00.000000Z",
+    "provider": "Squake"
+  }
+}
+```
+
+#### Calculate Train Carbon Emissions
+
+```
+POST /api/v1/carbon-emissions/calculate
+```
+
+**Request Body:**
+```json
+{
+  "type": "train",
+  "departure_station": "PAR",
+  "arrival_station": "LYO",
+  "passengers": 1,
+  "train_type": "high_speed",
+  "seat_type": "second_class",
+  "operator_name": "SNCF",
+  "country": "FR"
+}
+```
+
+#### Calculate Hotel Carbon Emissions
+
+```
+POST /api/v1/carbon-emissions/calculate
+```
+
+**Request Body:**
+```json
+{
+  "type": "hotel",
+  "hotel_type": "hotel",
+  "stars": 4,
+  "country": "FR",
+  "city": "Paris",
+  "hotel_name": "Example Hotel",
+  "code": "877089",
+  "code_type": "giata",
+  "room_type": "standard",
+  "number_of_visitors": 2,
+  "number_of_nights": 3
+}
+```
+
+### Error Responses
+
+The API returns appropriate HTTP status codes and error messages:
+
+- **400 Bad Request**: Invalid input parameters
+- **401 Unauthorized**: Missing or invalid authentication
+- **422 Unprocessable Entity**: Validation errors
+- **500 Internal Server Error**: Server-side errors
+
+Example error response:
+```json
+{
+  "error": {
+    "code": "422",
+    "message": "Type is required"
+  }
+}
+```
+
+## Implementation Details
+
+### Architecture
+
+The application follows a domain-driven design approach with the following structure:
+
+- **Domains**: Core business logic organized by domain
+  - Users: Authentication and user management
+  - CarbonEmissions: Carbon calculation services and models
+- **Externals**: Integration with external services
+  - Squake: API client for Squake carbon calculation service
+- **Http**: Controllers and middleware for handling HTTP requests
+
+### Methodologies
+
+The API uses the following methodologies from Squake:
+
+- **Flight**: GATE4 methodology
+- **Train**: BASE-EMPREINTE methodology
+- **Hotel**: HCMI methodology
+
+## Testing
+
+Run the test suite with:
+
+```bash
+php artisan test
+```
+
+The test suite includes:
+- Unit tests for core services
+- Integration tests for API endpoints
+- Mock tests for external API calls
 
 ## License
 
